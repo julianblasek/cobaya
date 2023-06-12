@@ -478,8 +478,11 @@ class classy(BoltzmannBase):
         # Needed for facilitating post-processing
 
         #Parameter in txt datei schreiben
-        print("Es klappt")
-         
+        var=params_values_dict["asdf"]
+        test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/parameters.txt"))
+        test=list(test)
+        test.append(var)
+        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
          
          
         #entfernen der Parameter
