@@ -476,6 +476,15 @@ class classy(BoltzmannBase):
         # If no output requested, remove arguments that produce an error
         # (e.g. complaints if halofit requested but no Cl's computed.) ?????
         # Needed for facilitating post-processing
+
+        #Parameter in txt datei schreiben
+        print("Es klappt")
+         
+         
+         
+        #entfernen der Parameter
+        del params_values_dict["asdf"]
+        
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
                 self.extra_args.pop(k, None)
