@@ -473,14 +473,17 @@ class classy(BoltzmannBase):
         self.extra_args["P_k_max_1/Mpc"] = max(k_max, k_max_old)
 
     def set(self, params_values_dict):
-        # If no output requested, remove arguments that produce an error
-        # (e.g. complaints if halofit requested but no Cl's computed.) ?????
-        # Needed for facilitating post-processing
 
-        #Parameter in txt datei schreiben
+        #neuer Parameter
         var=params_values_dict["asdf"]
+        
+        #leeres Dokument erzeugen
+        temp=[0,0]
+        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",temp)
+        
+        #Parameter in txt datei schreiben
         test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/parameters.txt"))
-        test=list(test)
+        test=list(test[2:])
         test.append(var)
         np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
          
