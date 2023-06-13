@@ -474,7 +474,7 @@ class classy(BoltzmannBase):
 
     def set(self, params_values_dict):
 
-        #neuer Parameter
+        #neuer Parameter+test
         var=params_values_dict["asdf"]
         
         #leeres Dokument erzeugen
