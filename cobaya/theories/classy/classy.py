@@ -476,7 +476,7 @@ class classy(BoltzmannBase):
 
 
         #zweiten parameter
-        ...
+        
         
         #neuer Parameter
         var=params_values_dict["asdf"]
