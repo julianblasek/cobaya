@@ -474,7 +474,7 @@ class classy(BoltzmannBase):
 
     def set(self, params_values_dict):
 
-
+        pritn("Paramater")
         #neuer Parameter
         var=params_values_dict["asdf"]
         
