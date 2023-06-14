@@ -474,26 +474,29 @@ class classy(BoltzmannBase):
 
     def set(self, params_values_dict):
 
-
-        #zweiten parameter
-        
-        
         #neuer Parameter
         var=params_values_dict["asdf"]
-        
-        #leeres Dokument erzeugen
-        temp=[0,0]
-        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",temp)
-        
-        #Parameter in txt datei schreiben
-        test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/parameters.txt"))
-        test=list(test[2:])
-        test.append(var)
-        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
-         
-         
         #entfernen der Parameter
         del params_values_dict["asdf"]
+
+        
+        #Versuche Datei aufzurufen
+        try:
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/parameters.txt"))
+            
+        
+        #Erstelle Datei falls keine Vorhanden und rufe auf
+        except:
+            np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",[])
+            test=np.array(np.genfromtxt("/Users/julianblasek/Desktop/code/par.txt"))
+        
+            
+     
+        #Hinzufgen vom aktuellen Wert
+        test=np.append(test,var)
+
+        #Speicherung der Werte
+        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
