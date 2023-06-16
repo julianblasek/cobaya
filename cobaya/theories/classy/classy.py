@@ -475,9 +475,9 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict):
 
         #neuer Parameter
-        var=params_values_dict["asdf"]
+        var=params_values_dict["exponent"]
         #entfernen der Parameter
-        del params_values_dict["asdf"]
+        del params_values_dict["exponent"]
 
         
         #Versuche Datei aufzurufen
@@ -490,13 +490,39 @@ class classy(BoltzmannBase):
             np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",[])
             test=np.array(np.genfromtxt("/Users/julianblasek/Desktop/code/par.txt"))
         
-            
-     
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
-
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
+        
+        #Erstellen der me(z) Daten
+        
+
+        z=np.linspace(0,10**14,1000)
+        test=[]
+        i=0
+        test.append(0)
+        while (np.exp(i)<z[1]):
+            test.append(np.exp(i))
+            i+=1
+
+        z=np.append(test,z[1:])
+
+        s2=1.02 #start
+        e2=1.0 #end
+        n2=var #exponent
+        c2=-(s2-e2)/(10**(14*n2))
+            
+        def power(x):
+            return s2+(x**n2)*c2
+        
+        temp=[]
+        for i in range(len(z)):
+            s=[z[i],power(z[i]),power(z[i])] #z,  alpha,  me
+            temp.append(s)
+        np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
+ 
+        
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
