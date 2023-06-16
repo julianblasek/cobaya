@@ -495,27 +495,33 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
         
-        #Erstellen der me(z) Daten
-        
-
+        #Erstellen der z Daten
         z=np.linspace(0,10**14,1000)
         test=[]
         i=0
         test.append(0)
+        
+        #Zusätzliche kleine z-Werte erstellen
         while (np.exp(i)<z[1]):
             test.append(np.exp(i))
             i+=1
 
         z=np.append(test,z[1:])
 
+        
+        #Grenzen des Power Laws
         s2=1.02 #start
         e2=1.0 #end
         n2=var #exponent
+        
+        #Bestimmung des Vorfaktors
         c2=-(s2-e2)/(10**(14*n2))
-            
+        
+        #Power Law     
         def power(x):
             return s2+(x**n2)*c2
         
+        #Überschreiben der Daten.txt für Class
         temp=[]
         for i in range(len(z)):
             s=[z[i],power(z[i]),power(z[i])] #z,  alpha,  me
