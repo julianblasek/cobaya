@@ -475,25 +475,25 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict):
 
         #neuer Parameter
-        var=params_values_dict["exponent"]
+        var=params_values_dict["step"]
         #entfernen der Parameter
-        del params_values_dict["exponent"]
+        del params_values_dict["step"]
 
         
         #Versuche Datei aufzurufen
         try:
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/parameters.txt"))
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
             
         
         #Erstelle Datei falls keine Vorhanden und rufe auf
         except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",[])
-            test=np.array(np.genfromtxt("/Users/julianblasek/Desktop/code/par.txt"))
+            np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",[])
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
         
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
-        np.savetxt("/home/em632080/software/cobayafork/test2/parameters.txt",test)
+        np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
         #Erstellen der z Daten
         z=np.linspace(0,10**14,1000)
