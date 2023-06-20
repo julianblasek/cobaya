@@ -508,33 +508,39 @@ class classy(BoltzmannBase):
 
         z=np.append(test,z[1:])
 
-        
         #Grenzen der Step Funktion
-        s2=1.02 #start
-        e2=1.0 #ende
+        s2=1.02 #obere grenze
+        e2=1.0 #untere grenze
 
         #Anzahl Stufen
         steps=var
 
-        #Breite einer Stufe
-        b=len(z)/steps
 
+
+
+        #Breite einer Stufe
+        b=10**14/(steps)
+        p=b
         #Bestimmung des Anstiegs pro Stufe
-        val=(s2-e2)/steps
+        val=(s2-e2)/(steps)
         eff_val=0
+
 
         #Power Law     
         def step(x):
             return e2+eff_val
 
         #Überschreiben der Daten.txt für Class
+
         temp=[]
         for i in range(len(z)):
             s=[z[i],step(z[i]),step(z[i])] #z,  alpha,  me
             temp.append(s)
-            if(i%int(b)==0 and i!=0):
+            if(z[i]>=p):
                 eff_val+=val
-    
+                p+=b
+                
+
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
  
         
