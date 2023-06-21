@@ -475,7 +475,7 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict):
 
         #neuer Parameter
-        var=params_values_dict["step"]
+        var=int(params_values_dict["step"])
         #entfernen der Parameter
         del params_values_dict["step"]
 
@@ -495,21 +495,40 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
+        #Anzahl Werte
+        c=1000
+        c2=20
+
         #Erstellen der z Daten
-        z=np.linspace(0,10**14,25000)
-        test=[]
+        borders=np.linspace(0,10**14,c)
+
+
+        bunker=[]
+        for i in range(len(borders)-1):
+            temp=np.linspace(borders[i],borders[i+1],c2)
+            bunker.append(temp)
+
+        z=[]
+        for i in test:
+            z=np.append(z,i[:c2-1])
+            
+
+
+        temp=[]
+        temp.append(0)
         i=0
-        test.append(0)
-        
         #Zusätzliche kleine z-Werte erstellen
         while (np.exp(i)<z[1]):
-            test.append(np.exp(i))
+            temp.append(np.exp(i))
             i+=1
 
-        z=np.append(test,z[1:])
+        z=np.append(temp,z[1:])
+        z=np.append(z,10**14)
+
+
 
         #Grenzen der Step Funktion
-        s2=1.0205889 #obere grenze
+        s2=1.02 #obere grenze
         e2=1.0 #untere grenze
 
         #Anzahl Stufen
