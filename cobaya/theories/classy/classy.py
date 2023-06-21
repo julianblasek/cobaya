@@ -496,7 +496,7 @@ class classy(BoltzmannBase):
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
         #Erstellen der z Daten
-        z=np.linspace(0,10**14,1000)
+        z=np.linspace(0,10**14,10000)
         test=[]
         i=0
         test.append(0)
