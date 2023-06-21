@@ -496,7 +496,7 @@ class classy(BoltzmannBase):
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
         #Erstellen der z Daten
-        z=np.linspace(0,10**14,10000)
+        z=np.linspace(0,10**14,25000)
         test=[]
         i=0
         test.append(0)
@@ -509,7 +509,7 @@ class classy(BoltzmannBase):
         z=np.append(test,z[1:])
 
         #Grenzen der Step Funktion
-        s2=1.02 #obere grenze
+        s2=1.0205889 #obere grenze
         e2=1.0 #untere grenze
 
         #Anzahl Stufen
