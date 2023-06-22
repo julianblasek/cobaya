@@ -475,7 +475,7 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict):
 
         #neuer Parameter
-        var=int(params_values_dict["step"])
+        var=params_values_dict["step"]
         #entfernen der Parameter
         del params_values_dict["step"]
 
@@ -487,7 +487,7 @@ class classy(BoltzmannBase):
         
         #Erstelle Datei falls keine Vorhanden und rufe auf
         except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",[])
+            np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",[])
             test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
         
         #Hinzufgen vom aktuellen Wert
@@ -495,74 +495,35 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
-        #Anzahl Werte
-        c=1000
-        c2=20
-
+        #Sprung bei
+        z_step=1100
+        
         #Erstellen der z Daten
-        borders=np.linspace(0,10**14,c)
+        z1=np.linspace(0,z_step*2/3,300)
+        z2=np.linspace(z_step*2/3+1,z_step*4/3,2500)
+        z3=np.linspace(z_step*4/3+1,10**14,3500)
 
+        z=np.append(z1,z2)
+        z=np.append(z,z3)
 
-        bunker=[]
-        for i in range(len(borders)-1):
-            temp=np.linspace(borders[i],borders[i+1],c2)
-            bunker.append(temp)
+        #Grenzen der linearen Funktion
+        s2=var #start
+        e2=1.0 #end
 
-        z=[]
-        for i in test:
-            z=np.append(z,i[:c2-1])
-            
-
-
-        temp=[]
-        temp.append(0)
-        i=0
-        #Zusätzliche kleine z-Werte erstellen
-        while (np.exp(i)<z[1]):
-            temp.append(np.exp(i))
-            i+=1
-
-        z=np.append(temp,z[1:])
-        z=np.append(z,10**14)
-
-
-
-        #Grenzen der Step Funktion
-        s2=1.02 #obere grenze
-        e2=1.0 #untere grenze
-
-        #Anzahl Stufen
-        steps=var
-
-
-
-
-        #Breite einer Stufe
-        b=10**14/(steps)
-        p=b
-        #Bestimmung des Anstiegs pro Stufe
-        val=(s2-e2)/(steps)
-        eff_val=0
-
-
-        #Power Law     
+        #lin Function     
         def step(x):
-            return e2+eff_val
+            if x>=1100:
+                return s2
+            else:
+                return e2
 
         #Überschreiben der Daten.txt für Class
-
         temp=[]
         for i in range(len(z)):
             s=[z[i],step(z[i]),step(z[i])] #z,  alpha,  me
             temp.append(s)
-            if(z[i]>=p):
-                eff_val+=val
-                p+=b
-                
-
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
- 
-        
+  
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
