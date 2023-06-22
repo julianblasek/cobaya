@@ -496,12 +496,12 @@ class classy(BoltzmannBase):
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
         #Sprung bei
-        z_step=1100
+        z_step=70
         
         #Erstellen der z Daten
-        z1=np.linspace(0,z_step*2/3,300)
-        z2=np.linspace(z_step*2/3+1,z_step*4/3,2500)
-        z3=np.linspace(z_step*4/3+1,10**14,3500)
+        z1=np.linspace(0,z_step*2/3,500)
+        z2=np.linspace(z_step*2/3+1,z_step*4/3,3000)
+        z3=np.linspace(z_step*4/3+1,10**14,3000)
 
         z=np.append(z1,z2)
         z=np.append(z,z3)
@@ -512,7 +512,7 @@ class classy(BoltzmannBase):
 
         #lin Function     
         def step(x):
-            if x>=1100:
+            if x>=z_step:
                 return s2
             else:
                 return e2
