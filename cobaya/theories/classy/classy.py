@@ -178,6 +178,7 @@ interface ready.
 # Global
 import sys
 import os
+import subprocess
 import numpy as np
 from copy import deepcopy
 from typing import NamedTuple, Sequence, Union, Optional, Callable, Any
@@ -472,8 +473,9 @@ class classy(BoltzmannBase):
             "P_k_max_1/Mpc", h_fid * self.extra_args.pop("P_k_max_h/Mpc", 0))
         self.extra_args["P_k_max_1/Mpc"] = max(k_max, k_max_old)
 
-    def set(self, params_values_dict):
+    def set(self, params_values_dict,state):
 
+        
         #neuer Parameter
         var=params_values_dict["step"]
         #entfernen der Parameter
@@ -524,6 +526,29 @@ class classy(BoltzmannBase):
             temp.append(s)
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
   
+        """"
+        #Prymordial Code
+        #Alle outputs = run prymodial
+        #params_values_dict["N_ur"]=N_effprymordial
+        code_path="/home/em632080/software/bbnfork/PRyMordial/bbn.py "
+        code_value=str(var)
+        command=code_path+code_value
+        
+        cmd = ['python3', command]
+        subprocess.Popen(cmd).wait()
+        
+        bbn_inputs=np.array(np.genfromtxt("bbn_inputs.txt"))
+        print(" ")
+        print(bbn_inputs[8])
+        print(" ")
+        print(" Hat geklappt ")
+        """
+        
+        
+        
+        #Lithium , 3He
+        #state["Li"]=Li
+        #state["He"]=He
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
@@ -537,7 +562,9 @@ class classy(BoltzmannBase):
 
     def calculate(self, state, want_derived=True, **params_values_dict):
         # Set parameters
-        self.set(params_values_dict)
+        self.set(params_values_dict,state)
+        
+        
         # Compute!
         try:
             self.classy.compute()
