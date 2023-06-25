@@ -324,36 +324,28 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",test)
         
-        #Erstellen der z Daten
-        z=np.linspace(0,10**14,2000)
-        test=[]
-        i=0
-        test.append(0)
-        
-        #Zusätzliche kleine z-Werte erstellen
-        while (np.exp(i)<z[1]):
-            test.append(np.exp(i))
-            i+=1
 
-        z=np.append(test,z[1:])
+        # Erstellen der z-Daten
+        z = np.linspace(0, 10**14, 2000)
+        test = np.exp(np.arange(np.log(z[1])))
 
-        #Grenzen des Power Laws
-        s2=1.02 #start (z=10^14)
-        e2=1.0 #end (z=0)
-        n2=var #exponent
-        
-        #Bestimmung des Vorfaktors
-        c2=(s2-e2)/(10**(14*n2))
-        
-        #Power Law     
+        z = np.concatenate(([0], test, z[1:]))
+
+        # Grenzen des Power Laws
+        s2 = 1.02  # start (z=10^14)
+        e2 = 1.0  # end (z=0)
+        n2 = var  # exponent
+
+        # Bestimmung des Vorfaktors
+        c2 = (s2 - e2) / (10**(14 * n2))
+
+        # Power Law
         def power(x):
-            return e2+(x**n2)*c2
-        
-        #Überschreiben der Daten.txt für Class
-        temp=[]
-        for i in range(len(z)):
-            s=[z[i],power(z[i]),power(z[i])] #z,  alpha,  me
-            temp.append(s)
+            return e2 + (x**n2) * c2
+
+        # Überschreiben der Daten.txt für Class
+        temp = [[z[i], power(z[i]), power(z[i])] for i in range(len(z))]
+
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         """"
         #Prymordial Code
