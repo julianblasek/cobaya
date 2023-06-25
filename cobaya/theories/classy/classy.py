@@ -362,27 +362,13 @@ class classy(BoltzmannBase):
         #Prymordial Code
         #Alle outputs = run prymodial
         #params_values_dict["N_ur"]=N_effprymordial
-        code_path="/home/em632080/software/bbnfork/PRyMordial/bbn.py "
-        code_value=str(var)
-        command=code_path+code_value
-        
-        cmd = ['python3', command]
-        subprocess.Popen(cmd).wait()
-        
-        bbn_inputs=np.array(np.genfromtxt("bbn_inputs.txt"))
-        print(" ")
-        print(bbn_inputs[8])
-        print(" ")
-        print(" Hat geklappt ")
-        """
-        bbn_inputs=varconst(var)
-        np.savetxt("/home/em632080/software/pipe.txt",bbn_inputs)
-        
-        
-        
         #Lithium , 3He
         #state["Li"]=Li
         #state["He"]=He
+        """
+        bbn_inputs=varconst(var)
+        np.savetxt("/home/em632080/software/linpipe.txt",bbn_inputs)
+
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
