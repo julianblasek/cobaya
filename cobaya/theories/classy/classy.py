@@ -305,59 +305,58 @@ class classy(BoltzmannBase):
 
     def set(self, params_values_dict,state):
 
-
         #neuer Parameter
-        var=params_values_dict["linvalue"]
+        var=params_values_dict["step"]
         #entfernen der Parameter
-        del params_values_dict["linvalue"]
+        del params_values_dict["step"]
 
         
         #Versuche Datei aufzurufen
         try:
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
             
         
         #Erstelle Datei falls keine Vorhanden und rufe auf
         except:
             np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",[])
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
         
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
-        np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",test)
+        np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
+        
+        #Sprung bei
+        z_step=70
         
         #Erstellen der z Daten
-        z=np.linspace(0,10**14,2000)
-        test=[]
-        i=0
-        test.append(0)
-        
-        #Zusätzliche kleine z-Werte erstellen
-        while (np.exp(i)<z[1]):
-            test.append(np.exp(i))
-            i+=1
+        z1=np.linspace(0,z_step*2/3,500)
+        z2=np.linspace(z_step*2/3+1,z_step*4/3,3000)
+        z3=np.linspace(z_step*4/3+1,10**14,3000)
 
-        z=np.append(test,z[1:])
+        z=np.append(z1,z2)
+        z=np.append(z,z3)
 
-        
         #Grenzen der linearen Funktion
         s2=var #start
         e2=1.0 #end
-        
-        #Bestimmung der Steigung
-        m=(var-1)/(10**14)
-        
+
         #lin Function     
-        def lin(x):
-            return e2+m*x
-        
+        def step(x):
+            if x>=z_step:
+                return s2
+            else:
+                return e2
+
         #Überschreiben der Daten.txt für Class
         temp=[]
         for i in range(len(z)):
-            s=[z[i],lin(z[i]),lin(z[i])] #z,  alpha,  me
+            s=[z[i],step(z[i]),step(z[i])] #z,  alpha,  me
             temp.append(s)
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
+        
+        
+        
         """"
         #Prymordial Code
         #Alle outputs = run prymodial
