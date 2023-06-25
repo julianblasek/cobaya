@@ -304,28 +304,25 @@ class classy(BoltzmannBase):
         self.extra_args["P_k_max_1/Mpc"] = max(k_max, k_max_old)
 
     def set(self, params_values_dict,state):
-
-
         #neuer Parameter
-        var=params_values_dict["linvalue"]
+        var=params_values_dict["exponent"]
         #entfernen der Parameter
-        del params_values_dict["linvalue"]
+        del params_values_dict["exponent"]
 
-        
         #Versuche Datei aufzurufen
         try:
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/exponent.txt"))
             
         
         #Erstelle Datei falls keine Vorhanden und rufe auf
         except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",[])
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
+            np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",[])
+            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/exponent.txt"))
         
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
-        np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",test)
+        np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",test)
         
         #Erstellen der z Daten
         z=np.linspace(0,10**14,2000)
@@ -340,22 +337,22 @@ class classy(BoltzmannBase):
 
         z=np.append(test,z[1:])
 
+        #Grenzen des Power Laws
+        s2=1.02 #start (z=10^14)
+        e2=1.0 #end (z=0)
+        n2=var #exponent
         
-        #Grenzen der linearen Funktion
-        s2=var #start
-        e2=1.0 #end
+        #Bestimmung des Vorfaktors
+        c2=(s2-e2)/(10**(14*n2))
         
-        #Bestimmung der Steigung
-        m=(var-1)/(10**14)
-        
-        #lin Function     
-        def lin(x):
-            return e2+m*x
+        #Power Law     
+        def power(x):
+            return e2+(x**n2)*c2
         
         #Überschreiben der Daten.txt für Class
         temp=[]
         for i in range(len(z)):
-            s=[z[i],lin(z[i]),lin(z[i])] #z,  alpha,  me
+            s=[z[i],power(z[i]),power(z[i])] #z,  alpha,  me
             temp.append(s)
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         """"
