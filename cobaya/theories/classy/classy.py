@@ -327,36 +327,24 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",test)
         
-        #Erstellen der z Daten
-        z=np.linspace(0,10**14,2000)
-        test=[]
-        i=0
-        test.append(0)
-        
-        #Zusätzliche kleine z-Werte erstellen
-        while (np.exp(i)<z[1]):
-            test.append(np.exp(i))
-            i+=1
+        # Erstellen der z Daten
+        z = np.linspace(0, 1e14, 2000)
+        additional_z = np.exp(np.arange(1, np.log(z[1]), 1))
+        z = np.concatenate(([0], additional_z, z[1:]))
 
-        z=np.append(test,z[1:])
+        # Grenzen der linearen Funktion
+        s2 = var  # start
+        e2 = 1.0  # end
 
-        
-        #Grenzen der linearen Funktion
-        s2=var #start
-        e2=1.0 #end
-        
-        #Bestimmung der Steigung
-        m=(var-1)/(10**14)
-        
-        #lin Function     
+        # Bestimmung der Steigung
+        m = (var - e2) / 1e14
+
+        # lin Function
         def lin(x):
-            return e2+m*x
-        
-        #Überschreiben der Daten.txt für Class
-        temp=[]
-        for i in range(len(z)):
-            s=[z[i],lin(z[i]),lin(z[i])] #z,  alpha,  me
-            temp.append(s)
+            return e2 + m * x
+
+        # Überschreiben der daten.txt für Class
+        temp = np.column_stack((z, lin(z), lin(z)))  # z, alpha, me
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         """"
         #Prymordial Code
