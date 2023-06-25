@@ -363,7 +363,7 @@ class classy(BoltzmannBase):
         #state["Li"]=Li
         #state["He"]=He
         """
-        bbn_inputs=varconst(var)
+        bbn_inputs=varconst(temp[len(z)-1][1])
         np.savetxt("/home/em632080/software/linpipe.txt",bbn_inputs)
 
         
