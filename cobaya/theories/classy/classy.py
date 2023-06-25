@@ -326,33 +326,25 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
         
-        #Sprung bei
-        z_step=70
-        
-        #Erstellen der z Daten
-        z1=np.linspace(0,z_step*2/3,500)
-        z2=np.linspace(z_step*2/3+1,z_step*4/3,3000)
-        z3=np.linspace(z_step*4/3+1,10**14,3000)
+        # Sprung bei
+        z_step = 70
 
-        z=np.append(z1,z2)
-        z=np.append(z,z3)
+        # Erstellen der z Daten
+        z1 = np.linspace(0, z_step * 2 / 3, 500)
+        z2 = np.linspace(z_step * 2 / 3 + 1, z_step * 4 / 3, 3000)
+        z3 = np.linspace(z_step * 4 / 3 + 1, 1e14, 3000)
 
-        #Grenzen der linearen Funktion
-        s2=var #start
-        e2=1.0 #end
+        z = np.concatenate((z1, z2, z3))
 
-        #lin Function     
-        def step(x):
-            if x>=z_step:
-                return s2
-            else:
-                return e2
+        # Werte der Stepfunktion
+        s = var  # start
+        e = 1.0  # end
 
-        #Überschreiben der Daten.txt für Class
-        temp=[]
-        for i in range(len(z)):
-            s=[z[i],step(z[i]),step(z[i])] #z,  alpha,  me
-            temp.append(s)
+        # step Function
+        step_values = np.where(z >= z_step, s, e)
+
+        # Überschreiben der daten.txt für Class
+        temp = np.column_stack((z, step_values, step_values))  # z, alpha, me
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         
         
