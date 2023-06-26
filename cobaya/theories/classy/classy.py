@@ -309,7 +309,9 @@ class classy(BoltzmannBase):
         var=params_values_dict["step"]
         #entfernen der Parameter
         del params_values_dict["step"]
+        
 
+        
         
         #Versuche Datei aufzurufen
         try:
@@ -318,13 +320,15 @@ class classy(BoltzmannBase):
         
         #Erstelle Datei falls keine Vorhanden und rufe auf
         except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",[])
+            np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",[])
             test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/step.txt"))
         
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
+        
+        
         first_border = 70
         sec_border = 0.8 * 10**14
 
