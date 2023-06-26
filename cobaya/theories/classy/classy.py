@@ -330,9 +330,9 @@ class classy(BoltzmannBase):
         z_step = 70
 
         # Erstellen der z Daten
-        z1 = np.linspace(0, z_step * 2 / 3, 500)
-        z2 = np.linspace(z_step * 2 / 3 + 1, z_step * 4 / 3, 3000)
-        z3 = np.linspace(z_step * 4 / 3 + 1, 1e14, 3000)
+        z1 = np.linspace(0, z_step * 2 / 3, 100)
+        z2 = np.linspace(z_step * 2 / 3 + 10**-3, z_step * 4 / 3, 3000)
+        z3 = np.linspace(z_step * 4 / 3 + 10**-3, 1e14, 6000)
 
         z = np.concatenate((z1, z2, z3))
 
