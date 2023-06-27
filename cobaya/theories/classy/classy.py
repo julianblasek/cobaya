@@ -371,7 +371,8 @@ class classy(BoltzmannBase):
         #=bbn_inputs[6] #He3/H x 10^5
         #=bbn_inputs[7] #Li7/H x 10^10
         #Lithium , 3He
-        #state["Li"]=Li
+
+            
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
