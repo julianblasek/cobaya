@@ -328,33 +328,28 @@ class classy(BoltzmannBase):
         
         
         first_border = 70
-        sec_border = 1.2 * 10**8
 
-        # Sprung bei Erstellen der z-Daten
-        z = np.linspace(0.01, np.log(1e14), 6000)
-
+        #Erstellen der Z-Daten
+        z1 = np.linspace(0.01, np.log(200), 3000) #Um Step clean zu modellieren
+        z2 = np.linspace(np.log(201), np.log(1e14), 3000) #fürt restliche Werte
+        z = np.concatenate((z1, z2))
         # Grenzen der linearen Funktion
         e = 1.0  # end
 
-        # Bestimmung der Steigung
-        m = (var - e) / (np.log(sec_border) - np.log(first_border))
-
         # Lineare Funktion
-        def lin(x):
-            x_exp = np.exp(x)
+        def step(x):
             
-            if x_exp <= first_border:
-                return 1
-            elif x_exp >= sec_border:
+            if x >= first_border:
                 return var
             else:
-                return e + m * (x - np.log(70))
+                return e
 
         # Überschreiben der daten.txt für Class
-        temp = [(np.exp(x), lin(x), lin(x)) for x in z]
+        temp = [(x, step(x), step(x)) for x in z]
 
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         
+
         
         
         """"
