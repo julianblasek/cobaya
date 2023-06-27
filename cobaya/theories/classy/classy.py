@@ -306,10 +306,9 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict,state):
 
 
-        #neuer Parameter
-        var=params_values_dict["linvalue"]
+       
         #entfernen der Parameter
-        del params_values_dict["linvalue"]
+        var = params_values_dict.pop("linvalue", None)
 
         
         
