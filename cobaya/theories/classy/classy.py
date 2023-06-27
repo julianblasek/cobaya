@@ -353,10 +353,7 @@ class classy(BoltzmannBase):
 
         temp=temp1+temp2+temp3
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
-        
 
-        
-        
         """"
         #Prymordial Code
         #Alle outputs = run prymodial
