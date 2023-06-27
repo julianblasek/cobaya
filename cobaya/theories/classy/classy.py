@@ -353,18 +353,18 @@ class classy(BoltzmannBase):
 
         temp=temp1+temp2+temp3
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
-
-        """"
+        
         #Prymordial Code
-        #Alle outputs = run prymodial
+        bbn_inputs=varconst(var)
+        
+        #evtl Speicherung
+        #np.savetxt("/home/em632080/software/prymordial_data/steppipe.txt",bbn_inputs)
+
+
         #params_values_dict["N_ur"]=N_effprymordial
         #Lithium , 3He
         #state["Li"]=Li
         #state["He"]=He
-        """
-        bbn_inputs=varconst(var)
-        np.savetxt("/home/em632080/software/linpipe.txt",bbn_inputs)
-
         
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
