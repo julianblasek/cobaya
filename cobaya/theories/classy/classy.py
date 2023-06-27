@@ -304,21 +304,22 @@ class classy(BoltzmannBase):
         self.extra_args["P_k_max_1/Mpc"] = max(k_max, k_max_old)
 
     def set(self, params_values_dict,state):
-        #neuer Parameter
-        var=params_values_dict["exponent"]
         #entfernen der Parameter
-        del params_values_dict["exponent"]
+        var = params_values_dict.pop("exponent", None)
 
-        #Versuche Datei aufzurufen
-        try:
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/exponent.txt"))
-            
         
-        #Erstelle Datei falls keine Vorhanden und rufe auf
-        except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",[])
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/exponent.txt"))
         
+        #Speicherort der Geprüften Parameter
+        file_path = "/home/em632080/software/cobayafork/test2/exponent.txt"
+
+        # Überprüfe, ob die Datei vorhanden ist
+        if os.path.exists(file_path):
+            test = np.genfromtxt(file_path)
+        else:
+            # Erstelle die Datei, falls nicht vorhanden
+            np.savetxt(file_path, [])
+            test = np.genfromtxt(file_path)
+
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
