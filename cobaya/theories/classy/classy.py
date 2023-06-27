@@ -312,50 +312,67 @@ class classy(BoltzmannBase):
         del params_values_dict["linvalue"]
 
         
-        #Versuche Datei aufzurufen
-        try:
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
-            
         
-        #Erstelle Datei falls keine Vorhanden und rufe auf
-        except:
-            np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",[])
-            test=np.array(np.genfromtxt("/home/em632080/software/cobayafork/test2/linvalue.txt"))
-        
+        #Speicherort der Geprüften Parameter
+        file_path = "/home/em632080/software/cobayafork/test2/linvalue.txt"
+
+        # Überprüfe, ob die Datei vorhanden ist
+        if os.path.exists(file_path):
+            test = np.genfromtxt(file_path)
+        else:
+            # Erstelle die Datei, falls nicht vorhanden
+            np.savetxt(file_path, [])
+            test = np.genfromtxt(file_path)
+
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/linvalue.txt",test)
         
-        # Sprung bei Erstellen der z Daten
-        z = np.linspace(1, np.log(1e14), 1000)
+        first_border = 70 #Dark Age
+        sec_border = 1.2 * 10**8 #BBN vorbei
+
+        # Sprung bei Erstellen der z-Daten
+        z = np.linspace(0.01, np.log(1e14), 6000)
 
         # Grenzen der linearen Funktion
-        e2 = 1.0  # end
+        e = 1.0  # end
 
         # Bestimmung der Steigung
-        m = (var - e2) / np.log(1e14)
+        m = (var - e) / (np.log(sec_border) - np.log(first_border))
 
-        # lin Function
+        # Lineare Funktion
         def lin(x):
-            return e2 + m * x
+            x_exp = np.exp(x)
+            
+            if x_exp <= first_border:
+                return 1
+            elif x_exp >= sec_border:
+                return var
+            else:
+                return e + m * (x - np.log(70))
 
         # Überschreiben der daten.txt für Class
-        temp = np.column_stack((np.exp(z), lin(z), lin(z)))  # z, alpha, me
-        temp = np.insert(temp, 0, [0, 1, 1], axis=0)
-
+        temp = [(np.exp(x), lin(x), lin(x)) for x in z]
 
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
-        """"
+        
+        
+        
+        
         #Prymordial Code
-        #Alle outputs = run prymodial
+        bbn_inputs=varconst(var)
+        
+        #evtl Speicherung
+        #np.savetxt("/home/em632080/software/prymodial_data/linpipe.txt",bbn_inputs)
+
+
         #params_values_dict["N_ur"]=N_effprymordial
         #Lithium , 3He
         #state["Li"]=Li
         #state["He"]=He
-        """
-        bbn_inputs=varconst(var)
-        np.savetxt("/home/em632080/software/linpipe.txt",bbn_inputs)
+
+
 
         
         if not self.extra_args["output"]:
