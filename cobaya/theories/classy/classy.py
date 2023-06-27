@@ -304,6 +304,7 @@ class classy(BoltzmannBase):
         self.extra_args["P_k_max_1/Mpc"] = max(k_max, k_max_old)
 
     def set(self, params_values_dict,state):
+       
         #entfernen der Parameter
         var = params_values_dict.pop("exponent", None)
 
@@ -325,39 +326,58 @@ class classy(BoltzmannBase):
         #Speicherung der Werte
         np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",test)
         
+        first_border = 70 #Dark Age
+        sec_border = 1.2 * 10**8 #BBN vorbei
 
-        # Erstellen der z-Daten
-        z = np.linspace(0, 10**14, 2000)
-        test = np.exp(np.arange(np.log(z[1])))
+        # Sprung bei Erstellen der z-Daten
+        z = np.exp(np.linspace(0.01, np.log(1e14), 6000))
 
-        z = np.concatenate(([0], test, z[1:]))
+
 
         # Grenzen des Power Laws
-        s2 = 1.02  # start (z=10^14)
-        e2 = 1.0  # end (z=0)
-        n2 = var  # exponent
+        s = 1.02  # start (z=10^14)
+        e = 1.0  # end (z=0)
+        n = var  # exponent
 
         # Bestimmung des Vorfaktors
-        c2 = (s2 - e2) / (10**(14 * n2))
+        a = (s - e) / ((sec_border**n-first_border**n))
+        b=e-a*first_border**n
 
-        # Power Law
+        # Lineare Funktion
         def power(x):
-            return e2 + (x**n2) * c2
 
-        # Überschreiben der Daten.txt für Class
-        temp = [[z[i], power(z[i]), power(z[i])] for i in range(len(z))]
+            
+            if x < first_border:
+                return 1
+            elif x >= sec_border:
+                return s
+            else:
+                return b + (x**n) * a
+            
+            
+
+
+        # Überschreiben der daten.txt für Class
+        temp = [(x, power(x), power(x)) for x in z]
+        temp.insert(0, (0, e, e))
 
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
-        """"
+        
+        
+        
+        
         #Prymordial Code
-        #Alle outputs = run prymodial
+        bbn_inputs=varconst(var)
+        
+        #evtl Speicherung
+        #np.savetxt("/home/em632080/software/prymodial_data/linpipe.txt",bbn_inputs)
+
+
         #params_values_dict["N_ur"]=N_effprymordial
         #Lithium , 3He
         #state["Li"]=Li
         #state["He"]=He
-        """
-        bbn_inputs=varconst(temp[len(z)-1][1])
-        np.savetxt("/home/em632080/software/linpipe.txt",bbn_inputs)
+
 
         
         if not self.extra_args["output"]:
