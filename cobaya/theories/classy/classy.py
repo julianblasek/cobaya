@@ -333,7 +333,7 @@ class classy(BoltzmannBase):
         #Erstellen der Z-Daten
         z1 = np.linspace(0, first_border*2/3, 100) #Um Step clean zu modellieren
         z2 = np.linspace(first_border*2/3+0.01,100,2000)
-        z3 = np.linspace(np.log(101), np.log(1e14), 2000) #fürt restliche Werte
+        z3 = np.exp(np.linspace(np.log(101), np.log(1e14), 2000)) #fürt restliche Werte
 
 
         # Grenzen der linearen Funktion
@@ -349,7 +349,7 @@ class classy(BoltzmannBase):
         # Überschreiben der daten.txt für Class
         temp1 = [(x, step1(x), step1(x)) for x in z1]
         temp2= [(x, step1(x), step1(x)) for x in z2]
-        temp3= [(np.exp(x), var, var) for x in z3]
+        temp3= [(x, var, var) for x in z3]
 
         temp=temp1+temp2+temp3
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
