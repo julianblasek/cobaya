@@ -366,11 +366,11 @@ class classy(BoltzmannBase):
         #=bbn_inputs[1] #Ωνh2 x 10^6 (rel)
         #=bbn_inputs[2] #Σmν/Ωνh2 [eV]
         params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
-        #bbn_inputs[4] #YP (CMB) --> Brauchen wir nicht
-        #=bbn_inputs[5] #D/H x 10^5
-        #=bbn_inputs[6] #He3/H x 10^5
-        #=bbn_inputs[7] #Li7/H x 10^10
-        #Lithium , 3He
+        #bbn_inputs[4] #YP (CMB)
+        
+        state["D/H"]=bbn_inputs[5]*10**-5 #D/H x 10^5
+        state["He3/H"]=bbn_inputs[6]*10**-5 #He3/H x 10^5
+        state["Li7/H"]=bbn_inputs[7]*10**-10 #Li7/H x 10^10
 
             
         
