@@ -330,7 +330,7 @@ class classy(BoltzmannBase):
         
         
         first_border = 70
-        sec_border = 0.8 * 10**14
+        sec_border = 1.2 * 10**8
 
         # Sprung bei Erstellen der z-Daten
         z = np.linspace(0.01, np.log(1e14), 6000)
