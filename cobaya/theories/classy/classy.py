@@ -364,14 +364,20 @@ class classy(BoltzmannBase):
         bbn_inputs=varconst(var)
         
         #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymordial_data/linpipe.txt",bbn_inputs)
+        #np.savetxt("/home/em632080/software/prymordial_data/lin.txt",bbn_inputs)
 
 
-        #params_values_dict["N_ur"]=N_effprymordial
+        #Übergabe der PRyMordial Parameter
+        params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
+        #=bbn_inputs[1] #Ωνh2 x 10^6 (rel)
+        #=bbn_inputs[2] #Σmν/Ωνh2 [eV]
+        params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
+        #bbn_inputs[4] #YP (CMB) --> Brauchen wir nicht
+        #=bbn_inputs[5] #D/H x 10^5
+        #=bbn_inputs[6] #He3/H x 10^5
+        #=bbn_inputs[7] #Li7/H x 10^10
         #Lithium , 3He
         #state["Li"]=Li
-        #state["He"]=He
-
 
 
         
