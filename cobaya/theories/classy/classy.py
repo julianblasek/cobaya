@@ -353,6 +353,7 @@ class classy(BoltzmannBase):
 
         # Überschreiben der daten.txt für Class
         temp = [(np.exp(x), lin(x), lin(x)) for x in z]
+        temp.insert(0, (0, e, e))
 
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         
