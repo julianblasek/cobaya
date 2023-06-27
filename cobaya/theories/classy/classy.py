@@ -364,7 +364,7 @@ class classy(BoltzmannBase):
         bbn_inputs=varconst(var)
         
         #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymodial_data/linpipe.txt",bbn_inputs)
+        #np.savetxt("/home/em632080/software/prymordial_data/linpipe.txt",bbn_inputs)
 
 
         #params_values_dict["N_ur"]=N_effprymordial
