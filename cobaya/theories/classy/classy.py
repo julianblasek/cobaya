@@ -367,10 +367,11 @@ class classy(BoltzmannBase):
         #=bbn_inputs[2] #Σmν/Ωνh2 [eV]
         params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
         #bbn_inputs[4] #YP (CMB)
-        
-        state["D/H"]=bbn_inputs[5]*10**-5 #D/H 
-        state["He3/H"]=bbn_inputs[6]*10**-5 #He3/H 
-        state["Li7/H"]=bbn_inputs[7]*10**-10 #Li7/H 
+        #self.log.info(state)
+        self.D=bbn_inputs[5]*10**-5 #D/H
+        #self.He3=bbn_inputs[6]*10**-5 #He3/H
+        self.Li7=bbn_inputs[7]*10**-10 #Li7/H
+        self.Yp=bbn_inputs[4] #gesamter Heliumanteil
 
             
         
@@ -478,6 +479,18 @@ class classy(BoltzmannBase):
             # Prepare necessary extra derived parameters
         state["derived_extra"] = deepcopy(d_extra)
 
+
+    def get_Li7(self):
+        return self.Li7
+    
+    def get_D(self):
+        return self.D
+    
+    def get_Yp(self):
+        return self.Yp
+
+
+
     def _get_derived_all(self, derived_requested=True):
         """
         Returns a dictionary of derived parameters with their values,
@@ -506,13 +519,20 @@ class classy(BoltzmannBase):
         # which parameters are not recognized
         requested_and_extra.update(
             self.classy.get_current_derived_parameters(
-                [p for p, v in requested_and_extra.items() if v is None]))
+                [p for p, v in requested_and_extra.items() if ((v is None) and (p not in ["Li7","D","Yp"]))]))
         # Separate the parameters before returning
         # Remember: self.output_params is in sampler nomenclature,
         # but self.derived_extra is in CLASS
         derived = {
             p: requested_and_extra[self.translate_param(p)] for p in self.output_params}
+        derived["Li7"]=self.Li7
+        derived["D"]=self.D
+        derived["Yp"]=self.Yp
+        
         derived_extra = {p: requested_and_extra[p] for p in self.derived_extra}
+        derived_extra["Li7"]=self.Li7
+        derived_extra["Yp"]=self.Yp
+        derived_extra["D"]=self.D
         return derived, derived_extra
 
     def _get_Cl(self, ell_factor=False, units="FIRASmuK2", lensed=True):
@@ -566,7 +586,7 @@ class classy(BoltzmannBase):
 
     def get_can_provide_params(self):
         names = ['Omega_Lambda', 'Omega_cdm', 'Omega_b', 'Omega_m', 'rs_drag', 'z_reio',
-                 'YHe', 'Omega_k', 'age', 'sigma8']
+                 'YHe', 'Omega_k', 'age', 'sigma8','Li7','D','Yp','He']
         for name, mapped in self.renames.items():
             if mapped in names:
                 names.append(name)
