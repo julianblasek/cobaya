@@ -20,6 +20,8 @@ from cobaya.install import download_github_release, pip_install, check_gcc_versi
 from cobaya.component import ComponentNotInstalledError, load_external_module
 from cobaya.tools import Pool1D, Pool2D, PoolND, combine_1d, get_compiled_import_path, \
     VersionCheckError
+    
+from ...mpi import get_mpi_rank
 
 
 # Result collector
@@ -307,6 +309,9 @@ class classy(BoltzmannBase):
 
         #entfernen der Parameter
         var = params_values_dict.pop("step", None)
+        
+        mpi_int=get_mpi_rank()
+        print(mpi_int)
 
         
         
