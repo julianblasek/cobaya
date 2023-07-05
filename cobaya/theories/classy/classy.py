@@ -2,6 +2,7 @@
 
 # Meine Imports
 
+from ...mpi import get_mpi_rank
 
 
 # Global
@@ -307,7 +308,7 @@ class classy(BoltzmannBase):
 
        
         #entfernen der Parameter
-        var = params_values_dict.pop("linvalue", None)
+        var = params_values_dict.pop("lin", None)
         
         #eigene Datei jeweils
         mpi_int=get_mpi_rank()
@@ -316,7 +317,7 @@ class classy(BoltzmannBase):
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/linvalue_"+str(mpi_int)+ ".txt"
+        file_path = "/home/em632080/software/cobayafork/test2/lin_"+str(mpi_int)+ ".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
