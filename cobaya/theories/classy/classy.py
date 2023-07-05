@@ -1,9 +1,7 @@
 
 
 # Meine Imports
-
-from .PRyMordial.bbn import varconst
-from .PRyMordial.PRyM import PRyM_init as PRyMini
+from ...mpi import get_mpi_rank
 
 # Global
 import sys
@@ -306,12 +304,18 @@ class classy(BoltzmannBase):
     def set(self, params_values_dict,state):
        
         #entfernen der Parameter
-        var = params_values_dict.pop("exponent", None)
+        var = params_values_dict.pop("exp", None)
+
+        
+        
+        #eigene Datei jeweils
+        mpi_int=get_mpi_rank()
+        #print(mpi_int)
 
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/exponent.txt"
+        file_path = "/home/em632080/software/cobayafork/test2/exp_"+str(mpi_int)+".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -324,8 +328,7 @@ class classy(BoltzmannBase):
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
-        np.savetxt("/home/em632080/software/cobayafork/test2/exponent.txt",test)
-        
+        np.savetxt(file_path,test)
         first_border = 70 #Dark Age
         sec_border = 1.2 * 10**8 #BBN vorbei
 
@@ -345,8 +348,6 @@ class classy(BoltzmannBase):
 
         # Lineare Funktion
         def power(x):
-
-            
             if x < first_border:
                 return 1
             elif x >= sec_border:
@@ -366,24 +367,26 @@ class classy(BoltzmannBase):
         
         
         
-        #Prymordial Code
-        bbn_inputs=varconst(s)
+        def run(x):
+            cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
+            print(cmd)
+            os.system(cmd)
+    
+        run(var)
+        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
+        
         
         #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymordial_data/power.txt",bbn_inputs)
+        #np.savetxt("/home/em632080/software/prymordial_data/step.txt",bbn_inputs)
+
 
         #Übergabe der PRyMordial Parameter
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
-        #=bbn_inputs[1] #Ωνh2 x 10^6 (rel)
-        #=bbn_inputs[2] #Σmν/Ωνh2 [eV]
         params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
-        #bbn_inputs[4] #YP (CMB)
-        
-        state["D/H"]=bbn_inputs[5]*10**-5 #D/H x 10^5
-        state["He3/H"]=bbn_inputs[6]*10**-5 #He3/H x 10^5
-        state["Li7/H"]=bbn_inputs[7]*10**-10 #Li7/H x 10^10
-        
-
+        self.D=bbn_inputs[5]*10**-5 #D/H
+        #self.He3=bbn_inputs[6]*10**-5 #He3/H
+        self.Li7=bbn_inputs[7]*10**-10 #Li7/H
+        self.Yp=bbn_inputs[4] #gesamter Heliumanteil
 
         
         if not self.extra_args["output"]:
