@@ -1,10 +1,5 @@
 
 
-# Meine Imports
-
-from .PRyMordial.bbn import varconst
-from .PRyMordial.PRyM import PRyM_init as PRyMini
-
 # Global
 import sys
 import os
@@ -310,13 +305,14 @@ class classy(BoltzmannBase):
         #entfernen der Parameter
         var = params_values_dict.pop("step", None)
         
+        #eigene Datei jeweils
         mpi_int=get_mpi_rank()
-        print(mpi_int)
+        #print(mpi_int)
 
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/step.txt"
+        file_path = "/home/em632080/software/cobayafork/test2/step_"+str(mpi_int)+".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -329,7 +325,7 @@ class classy(BoltzmannBase):
         #Hinzufgen vom aktuellen Wert
         test=np.append(test,var)
         #Speicherung der Werte
-        np.savetxt("/home/em632080/software/cobayafork/test2/step.txt",test)
+        np.savetxt(file_path,test)
         
         
         first_border = 70
@@ -359,8 +355,14 @@ class classy(BoltzmannBase):
         temp=temp1+temp2+temp3
         np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
         
-        #Prymordial Code
-        bbn_inputs=varconst(var)
+        def run(x):
+            cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
+            print(cmd)
+            os.system(cmd)
+    
+        run(var)
+        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
+        
         
         #evtl Speicherung
         #np.savetxt("/home/em632080/software/prymordial_data/step.txt",bbn_inputs)
@@ -368,11 +370,7 @@ class classy(BoltzmannBase):
 
         #Übergabe der PRyMordial Parameter
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
-        #=bbn_inputs[1] #Ωνh2 x 10^6 (rel)
-        #=bbn_inputs[2] #Σmν/Ωνh2 [eV]
         params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
-        #bbn_inputs[4] #YP (CMB)
-        #self.log.info(state)
         self.D=bbn_inputs[5]*10**-5 #D/H
         #self.He3=bbn_inputs[6]*10**-5 #He3/H
         self.Li7=bbn_inputs[7]*10**-10 #Li7/H
