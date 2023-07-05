@@ -305,6 +305,7 @@ class classy(BoltzmannBase):
        
         #entfernen der Parameter
         var = params_values_dict.pop("exp", None)
+        val = params_values_dict.pop("value", None)
 
         
         
@@ -329,6 +330,25 @@ class classy(BoltzmannBase):
         test=np.append(test,var)
         #Speicherung der Werte
         np.savetxt(file_path,test)
+        
+        
+        
+        #Speicherort der Geprüften Parameter
+        file_path = "/home/em632080/software/cobayafork/test2/value_"+str(mpi_int)+".txt"
+
+        # Überprüfe, ob die Datei vorhanden ist
+        if os.path.exists(file_path):
+            test = np.genfromtxt(file_path)
+        else:
+            # Erstelle die Datei, falls nicht vorhanden
+            np.savetxt(file_path, [])
+            test = np.genfromtxt(file_path)
+
+        #Hinzufgen vom aktuellen Wert
+        test=np.append(test,val)
+        #Speicherung der Werte
+        np.savetxt(file_path,test)
+        
         first_border = 70 #Dark Age
         sec_border = 1.2 * 10**8 #BBN vorbei
 
@@ -338,7 +358,7 @@ class classy(BoltzmannBase):
 
 
         # Grenzen des Power Laws
-        s = 1.0175  # start (z=10^14)
+        s = val  # start (z=10^14)
         e = 1.0  # end (z=0)
         n = var  # exponent
 
@@ -372,12 +392,12 @@ class classy(BoltzmannBase):
             print(cmd)
             os.system(cmd)
     
-        run(var)
+        run(val)
         bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
         
         
         #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymordial_data/step.txt",bbn_inputs)
+        #np.savetxt("/home/em632080/software/prymordial_data/",bbn_inputs)
 
 
         #Übergabe der PRyMordial Parameter
@@ -493,6 +513,18 @@ class classy(BoltzmannBase):
             # Prepare necessary extra derived parameters
         state["derived_extra"] = deepcopy(d_extra)
 
+
+    def get_Li7(self):
+        return self.Li7
+    
+    def get_D(self):
+        return self.D
+    
+    def get_Yp(self):
+        return self.Yp
+
+
+
     def _get_derived_all(self, derived_requested=True):
         """
         Returns a dictionary of derived parameters with their values,
@@ -521,13 +553,20 @@ class classy(BoltzmannBase):
         # which parameters are not recognized
         requested_and_extra.update(
             self.classy.get_current_derived_parameters(
-                [p for p, v in requested_and_extra.items() if v is None]))
+                [p for p, v in requested_and_extra.items() if ((v is None) and (p not in ["Li7","D","Yp"]))]))
         # Separate the parameters before returning
         # Remember: self.output_params is in sampler nomenclature,
         # but self.derived_extra is in CLASS
         derived = {
             p: requested_and_extra[self.translate_param(p)] for p in self.output_params}
+        derived["Li7"]=self.Li7
+        derived["D"]=self.D
+        derived["Yp"]=self.Yp
+        
         derived_extra = {p: requested_and_extra[p] for p in self.derived_extra}
+        derived_extra["Li7"]=self.Li7
+        derived_extra["Yp"]=self.Yp
+        derived_extra["D"]=self.D
         return derived, derived_extra
 
     def _get_Cl(self, ell_factor=False, units="FIRASmuK2", lensed=True):
@@ -581,7 +620,7 @@ class classy(BoltzmannBase):
 
     def get_can_provide_params(self):
         names = ['Omega_Lambda', 'Omega_cdm', 'Omega_b', 'Omega_m', 'rs_drag', 'z_reio',
-                 'YHe', 'Omega_k', 'age', 'sigma8']
+                 'YHe', 'Omega_k', 'age', 'sigma8','Li7','D','Yp','He']
         for name, mapped in self.renames.items():
             if mapped in names:
                 names.append(name)
