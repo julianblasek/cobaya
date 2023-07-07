@@ -305,6 +305,7 @@ class classy(BoltzmannBase):
         #entfernen der Parameter
         var = params_values_dict.pop("step", None)
         
+        
         #eigene Datei jeweils
         mpi_int=get_mpi_rank()
         #print(mpi_int)
@@ -312,7 +313,8 @@ class classy(BoltzmannBase):
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/step_"+str(mpi_int)+".txt"
+        file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt"
+        params_values_dict["varying_constants_file"]="/home/em632080/class/step1/class_public/varying_const/daten_" +str(mpi_int)+".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -353,7 +355,7 @@ class classy(BoltzmannBase):
         temp3= [(x, var, var) for x in z3]
 
         temp=temp1+temp2+temp3
-        np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
+        np.savetxt("/home/em632080/class/step1/class_public/varying_const/daten_" +str(mpi_int)+".txt", temp)
         
         def run(x):
             cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
@@ -364,9 +366,6 @@ class classy(BoltzmannBase):
         bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
         
         
-        #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymordial_data/step.txt",bbn_inputs)
-
 
         #Übergabe der PRyMordial Parameter
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
