@@ -313,8 +313,8 @@ class classy(BoltzmannBase):
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt"
-        params_values_dict["varying_constants_file"]="/home/em632080/class/step1/class_public/varying_const/daten_" +str(mpi_int)+".txt"
+        file_path = "/home/em632080/software/cobayafork/test2/step2/step_"+str(mpi_int)+".txt"
+        params_values_dict["varying_constants_file"]="/home/em632080/class/step2/class_public/varying_const/daten_" +str(mpi_int)+".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -355,15 +355,15 @@ class classy(BoltzmannBase):
         temp3= [(x, var, var) for x in z3]
 
         temp=temp1+temp2+temp3
-        np.savetxt("/home/em632080/class/step1/class_public/varying_const/daten_" +str(mpi_int)+".txt", temp)
+        np.savetxt("/home/em632080/class/step2/class_public/varying_const/daten_" +str(mpi_int)+".txt", temp)
         
         def run(x):
-            cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
+            cmd="python3 PRyMordial/debug2.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
             print(cmd)
             os.system(cmd)
     
         run(var)
-        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
+        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp2/temp_"+str(mpi_int)+".txt")
         
         
 
