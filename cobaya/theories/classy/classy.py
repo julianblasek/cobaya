@@ -1,10 +1,5 @@
 
 
-# Meine Imports
-
-from ...mpi import get_mpi_rank
-
-
 # Global
 import sys
 import os
@@ -20,6 +15,8 @@ from cobaya.install import download_github_release, pip_install, check_gcc_versi
 from cobaya.component import ComponentNotInstalledError, load_external_module
 from cobaya.tools import Pool1D, Pool2D, PoolND, combine_1d, get_compiled_import_path, \
     VersionCheckError
+    
+from ...mpi import get_mpi_rank
 
 
 # Result collector
@@ -305,10 +302,9 @@ class classy(BoltzmannBase):
 
     def set(self, params_values_dict,state):
 
-
-       
         #entfernen der Parameter
         var = params_values_dict.pop("lin", None)
+        
         
         #eigene Datei jeweils
         mpi_int=get_mpi_rank()
@@ -317,7 +313,8 @@ class classy(BoltzmannBase):
         
         
         #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/lin_"+str(mpi_int)+ ".txt"
+        file_path = "/home/em632080/software/cobayafork/test2/lin1/lin_"+str(mpi_int)+".txt"
+        params_values_dict["varying_constants_file"]="/home/em632080/class/linval1/class_public/varying_const/daten_" +str(mpi_int)+".txt"
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -331,6 +328,7 @@ class classy(BoltzmannBase):
         test=np.append(test,var)
         #Speicherung der Werte
         np.savetxt(file_path,test)
+        
         
         first_border = 70 #Dark Age
         sec_border = 1.2 * 10**8 #BBN vorbei
@@ -358,24 +356,17 @@ class classy(BoltzmannBase):
         # Überschreiben der daten.txt für Class
         temp = [(np.exp(x), lin(x), lin(x)) for x in z]
         temp.insert(0, (0, e, e))
-
-        np.savetxt("/home/em632080/class_public/varying_const/daten.txt", temp)
-        
-        
-        
+        np.savetxt("/home/em632080/class/linval1/class_public/varying_const/daten_" +str(mpi_int)+".txt", temp)
         
         def run(x):
-            cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
+            cmd="python3 PRyMordial/debug3.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
             print(cmd)
             os.system(cmd)
     
         run(var)
-        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp/temp_"+str(mpi_int)+".txt")
+        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp3/temp_"+str(mpi_int)+".txt")
         
         
-        #evtl Speicherung
-        #np.savetxt("/home/em632080/software/prymordial_data/step.txt",bbn_inputs)
-
 
         #Übergabe der PRyMordial Parameter
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
@@ -386,7 +377,7 @@ class classy(BoltzmannBase):
         self.Yp=bbn_inputs[4] #gesamter Heliumanteil
 
             
-  
+        
         if not self.extra_args["output"]:
             for k in ["non_linear"]:
                 self.extra_args.pop(k, None)
@@ -492,7 +483,6 @@ class classy(BoltzmannBase):
         state["derived_extra"] = deepcopy(d_extra)
 
 
-
     def get_Li7(self):
         return self.Li7
     
@@ -501,7 +491,9 @@ class classy(BoltzmannBase):
     
     def get_Yp(self):
         return self.Yp
-        
+
+
+
     def _get_derived_all(self, derived_requested=True):
         """
         Returns a dictionary of derived parameters with their values,
