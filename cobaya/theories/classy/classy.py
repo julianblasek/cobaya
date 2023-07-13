@@ -312,9 +312,17 @@ class classy(BoltzmannBase):
 
         
         
-        #Speicherort der Geprüften Parameter
-        file_path = "/home/em632080/software/cobayafork/test2/step2/step_"+str(mpi_int)+".txt"
-        params_values_dict["varying_constants_file"]="/home/em632080/class/step2/class_public/varying_const/daten_" +str(mpi_int)+".txt"
+        #Speicherort der Geprüften Parameter mit Lithium
+        file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt" #mit Lithium
+        file_path2="/home/em632080/software/cobayafork/test2/temp/temp_" #mit Lithium
+        file_path3="/home/em632080/class/step1/class_public/varying_const/daten_" #mit Lithium
+        
+        #Speicherort der Geprüften Parameter ohne Lithium 1
+        #file_path = "/home/em632080/software/cobayafork/test2/step2/step_"+str(mpi_int)+".txt" #ohne Lithium
+        #file_path2="/home/em632080/software/cobayafork/test2/temp2/temp_" #ohne Lithium
+        #file_path3="/home/em632080/class/step2/class_public/varying_const/daten_" #ohne Lithium
+        #params_values_dict["varying_constants_file"]= file_path3+str(mpi_int)+".txt"
+
 
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
@@ -350,26 +358,26 @@ class classy(BoltzmannBase):
                 return var
 
         # Überschreiben der daten.txt für Class
-        temp1 = [(x, step1(x), step1(x)) for x in z1]
-        temp2= [(x, step1(x), step1(x)) for x in z2]
-        temp3= [(x, var, var) for x in z3]
+        temp1 = [(x, 1, step1(x)) for x in z1]
+        temp2= [(x, 1, step1(x)) for x in z2]
+        temp3= [(x, 1, var) for x in z3]
 
         temp=temp1+temp2+temp3
-        np.savetxt("/home/em632080/class/step2/class_public/varying_const/daten_" +str(mpi_int)+".txt", temp)
+        np.savetxt(file_path3 +str(mpi_int)+".txt", temp)
         
         def run(x):
-            cmd="python3 PRyMordial/debug2.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])
+            cmd="python3 PRyMordial/debug.py "+str(x)+" "+str(mpi_int)+" "+str(params_values_dict["omega_b"])+" "+file_path2
             print(cmd)
             os.system(cmd)
     
         run(var)
-        bbn_inputs=np.genfromtxt("/home/em632080/software/cobayafork/test2/temp2/temp_"+str(mpi_int)+".txt")
+        bbn_inputs=np.genfromtxt(file_path2+str(mpi_int)+".txt")
         
         
 
         #Übergabe der PRyMordial Parameter
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
-        params_values_dict["YHe"]=bbn_inputs[3] #YP (BBN)
+        params_values_dict["YHe"]=bbn_inputs[4] #YP (CMB)
         self.D=bbn_inputs[5]*10**-5 #D/H
         #self.He3=bbn_inputs[6]*10**-5 #He3/H
         self.Li7=bbn_inputs[7]*10**-10 #Li7/H
