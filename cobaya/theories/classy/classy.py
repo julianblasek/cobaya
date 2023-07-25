@@ -312,16 +312,23 @@ class classy(BoltzmannBase):
 
         
         
-        #Speicherort der Geprüften Parameter mit Lithium
+        #Speicherort der Geprüften Parameter mit Lithium ohne step
         file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt" #mit Lithium
         file_path2="/home/em632080/software/cobayafork/test2/temp/temp_" #mit Lithium
         file_path3="/home/em632080/class/step1/class_public/varying_const/daten_" #mit Lithium
         
-        #Speicherort der Geprüften Parameter ohne Lithium 1
+        #Speicherort der Geprüften Parameter ohne Lithium ohne step
         #file_path = "/home/em632080/software/cobayafork/test2/step2/step_"+str(mpi_int)+".txt" #ohne Lithium
         #file_path2="/home/em632080/software/cobayafork/test2/temp2/temp_" #ohne Lithium
         #file_path3="/home/em632080/class/step2/class_public/varying_const/daten_" #ohne Lithium
-        #params_values_dict["varying_constants_file"]= file_path3+str(mpi_int)+".txt"
+        
+        
+        #Speicherort der Geprüften Parameter ohne Lithium mit step
+        #file_path = "/home/em632080/software/cobayafork/test2/step3/step_"+str(mpi_int)+".txt" #ohne Lithium
+        #file_path2="/home/em632080/software/cobayafork/test2/temp3/temp_" #ohne Lithium
+        #file_path3="/home/em632080/class/step3/class_public/varying_const/daten_" #ohne Lithium
+       
+        params_values_dict["varying_constants_file"]= file_path3+str(mpi_int)+".txt"
 
 
         # Überprüfe, ob die Datei vorhanden ist
@@ -357,10 +364,10 @@ class classy(BoltzmannBase):
             else:
                 return var
 
-        # Überschreiben der daten.txt für Class
-        temp1 = [(x, 1, step1(x)) for x in z1]
-        temp2= [(x, 1, step1(x)) for x in z2]
-        temp3= [(x, 1, var) for x in z3]
+        # Überschreiben der daten.txt für Class x, 1 (alpha), step1(x) me
+        temp1 = [(x, 1, step1(x)) for x in z1] #x, 1, step1
+        temp2= [(x, 1, step1(x)) for x in z2] #x, 1, step1
+        temp3= [(x, 1, var) for x in z3] #x,1,var
 
         temp=temp1+temp2+temp3
         np.savetxt(file_path3 +str(mpi_int)+".txt", temp)
