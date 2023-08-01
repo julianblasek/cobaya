@@ -308,29 +308,39 @@ class classy(BoltzmannBase):
         
         #eigene Datei jeweils
         mpi_int=get_mpi_rank()
-        #print(mpi_int)
 
         
-        
-        #Speicherort der Geprüften Parameter mit Lithium ohne step
-        file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt" #mit Lithium
-        file_path2="/home/em632080/software/cobayafork/test2/temp/temp_" #mit Lithium
-        file_path3="/home/em632080/class/step1/class_public/varying_const/daten_" #mit Lithium
-        
-        #Speicherort der Geprüften Parameter ohne Lithium ohne step
+#---------------------- mit Step mit BBN     ------------------------------------------------------------------        
+        #file_path = "/home/em632080/software/cobayafork/test2/step1/step_"+str(mpi_int)+".txt" #mit Lithium
+        #file_path2="/home/em632080/software/cobayafork/test2/temp1/temp_" #mit Lithium
+        #file_path3="/home/em632080/class/step1/class_public/varying_const/daten_" #mit Lithium
+ 
+ #---------------------- mit Step mit BBN ohne D,He   ------------------------------------------------------------------
         #file_path = "/home/em632080/software/cobayafork/test2/step2/step_"+str(mpi_int)+".txt" #ohne Lithium
         #file_path2="/home/em632080/software/cobayafork/test2/temp2/temp_" #ohne Lithium
         #file_path3="/home/em632080/class/step2/class_public/varying_const/daten_" #ohne Lithium
         
         
-        #Speicherort der Geprüften Parameter ohne Lithium mit step
+ #---------------------- mit Step ohne BBN     ------------------------------------------------------------------        
         #file_path = "/home/em632080/software/cobayafork/test2/step3/step_"+str(mpi_int)+".txt" #ohne Lithium
         #file_path2="/home/em632080/software/cobayafork/test2/temp3/temp_" #ohne Lithium
         #file_path3="/home/em632080/class/step3/class_public/varying_const/daten_" #ohne Lithium
+        
+ #---------------------- ohne Step mit BBN    ------------------------------------------------------------------              
+        file_path = "/home/em632080/software/cobayafork/test2/raw1/raw_"+str(mpi_int)+".txt" #ohne Lithium
+        file_path2="/home/em632080/software/cobayafork/test2/temp4/temp_" #ohne Lithium
+        file_path3="/home/em632080/class/raw1/class_public/varying_const/daten_" #ohne Lithium
+        
+ #---------------------- ohne Step ohne BBN    ------------------------------------------------------------------       
+        #file_path = "/home/em632080/software/cobayafork/test2/raw2/raw_"+str(mpi_int)+".txt" #ohne Lithium
+        #file_path2="/home/em632080/software/cobayafork/test2/temp5/temp_" #ohne Lithium
+        #file_path3="/home/em632080/class/raw2/class_public/varying_const/daten_" #ohne Lithium
+        
+        
        
         params_values_dict["varying_constants_file"]= file_path3+str(mpi_int)+".txt"
 
-
+        """
         # Überprüfe, ob die Datei vorhanden ist
         if os.path.exists(file_path):
             test = np.genfromtxt(file_path)
@@ -343,7 +353,7 @@ class classy(BoltzmannBase):
         test=np.append(test,var)
         #Speicherung der Werte
         np.savetxt(file_path,test)
-        
+        """
         
         first_border = 70
 
@@ -386,9 +396,10 @@ class classy(BoltzmannBase):
         params_values_dict["N_ur"]=bbn_inputs[0] #N_eff
         params_values_dict["YHe"]=bbn_inputs[4] #YP (CMB)
         self.D=bbn_inputs[5]*10**-5 #D/H
-        #self.He3=bbn_inputs[6]*10**-5 #He3/H
         self.Li7=bbn_inputs[7]*10**-10 #Li7/H
+        self.eta=bbn_inputs[9] #baryon to photon ratio
         self.Yp=bbn_inputs[4] #gesamter Heliumanteil
+        #self.He3=bbn_inputs[6]*10**-5 #He3/H
 
             
         
@@ -506,6 +517,8 @@ class classy(BoltzmannBase):
     def get_Yp(self):
         return self.Yp
 
+    def get_eta(self):
+        return self.eta
 
 
     def _get_derived_all(self, derived_requested=True):
@@ -536,7 +549,7 @@ class classy(BoltzmannBase):
         # which parameters are not recognized
         requested_and_extra.update(
             self.classy.get_current_derived_parameters(
-                [p for p, v in requested_and_extra.items() if ((v is None) and (p not in ["Li7","D","Yp"]))]))
+                [p for p, v in requested_and_extra.items() if ((v is None) and (p not in ["Li7","D","Yp","eta"]))]))
         # Separate the parameters before returning
         # Remember: self.output_params is in sampler nomenclature,
         # but self.derived_extra is in CLASS
@@ -545,9 +558,11 @@ class classy(BoltzmannBase):
         derived["Li7"]=self.Li7
         derived["D"]=self.D
         derived["Yp"]=self.Yp
+        derived["eta"]=self.eta
         
         derived_extra = {p: requested_and_extra[p] for p in self.derived_extra}
         derived_extra["Li7"]=self.Li7
+        derived_extra["eta"]=self.eta
         derived_extra["Yp"]=self.Yp
         derived_extra["D"]=self.D
         return derived, derived_extra
@@ -603,7 +618,7 @@ class classy(BoltzmannBase):
 
     def get_can_provide_params(self):
         names = ['Omega_Lambda', 'Omega_cdm', 'Omega_b', 'Omega_m', 'rs_drag', 'z_reio',
-                 'YHe', 'Omega_k', 'age', 'sigma8','Li7','D','Yp','He']
+                 'YHe', 'Omega_k', 'age', 'sigma8','Li7','D','Yp','He',"eta"]
         for name, mapped in self.renames.items():
             if mapped in names:
                 names.append(name)
