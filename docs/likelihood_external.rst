@@ -20,9 +20,12 @@ List of external packages
  * `Planck NPIPE lensing <https://github.com/carronj/planck_PR4_lensing>`_
  * `Planck NPIPE hillipop and lollipop <https://github.com/planck-npipe>`_
  * `ACTPol DR4 <https://github.com/ACTCollaboration/pyactlike>`_
+ * `ACT DR6 Lensing <https://github.com/ACTCollaboration/act_dr6_lenslike>`_
  * `SPT-SZ, SPTPol & SPT-3G <https://github.com/xgarrido/spt_likelihoods>`_
  * `cobaya-mock-cmb <https://github.com/misharash/cobaya_mock_cmb>`_
  * `pyWMAP <https://github.com/HTJense/pyWMAP>`_
+ * `Mock CMB-HD <https://github.com/CMB-HD/hdlike>`_
+ * `TDCOSMO strong lensing time delays <https://github.com/nataliehogg/tdcosmo_ext>`_
  * `Example - simple demo <https://github.com/CobayaSampler/example_external_likelihood>`_
  * `Example - Planck lensing <https://github.com/CobayaSampler/planck_lensing_external>`_
 

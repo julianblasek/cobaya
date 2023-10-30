@@ -13,7 +13,8 @@ import platform
 from copy import deepcopy
 from itertools import chain
 from functools import reduce
-from typing import Mapping, Union, Optional, TypeVar, Callable, Dict, List
+from typing import Mapping, MutableMapping, Union, Optional, TypeVar, Callable, Dict, \
+    List
 from collections import defaultdict
 
 # Local
@@ -556,17 +557,27 @@ def is_equal_info(info_old, info_new, strict=True, print_not_log=False, ignore_b
                                 k, kind=block_name, component_path=component_path,
                                 class_name=(block1[k] or {}).get("class"), logger=logger)
                             ignore_k_this.update(set(
-                                getattr(cls, "_at_resume_prefer_new", {})))
+                                getattr(cls, "_at_resume_prefer_new", [])))
                         except ImportError:
                             pass
                     # Pop ignored and kept options
                     for j in ignore_k_this:
                         block1[k].pop(j, None)
                         block2[k].pop(j, None)
+            if not strict:
+                # For Mapping values, homogenize to None empty lists, sets, maps, etc.
+                # e.g. {value: {}} should be equal to {value: None}
+                for value in [block1[k], block2[k]]:
+                    if isinstance(value, MutableMapping):
+                        for kk in value:
+                            if hasattr(value[kk], "__len__") and len(value[kk]) == 0:
+                                value[kk] = None
             if block1[k] != block2[k]:
                 # For clarity, pop common stuff before printing
-                to_pop = [j for j in block1[k] if (block1[k].get(j) == block2[k].get(j))]
-                [(block1[k].pop(j, None), block2[k].pop(j, None)) for j in to_pop]
+                to_pop = [j for j in block1[k] if block1[k].get(j) == block2[k].get(j)]
+                for j in to_pop:
+                    block1[k].pop(j, None)
+                    block2[k].pop(j, None)
                 myprint(
                     myname + ": different content of [%s:%s]" % (block_name, k) +
                     " -- (re-run with `debug: True` for more info)")
@@ -590,7 +601,7 @@ def get_preferred_old_values(info_old):
                 cls = get_component_class(
                     k, kind=block_name, component_path=component_path,
                     class_name=(block[k] or {}).get("class"), logger=logger)
-                prefer_old_k_this = getattr(cls, "_at_resume_prefer_old", {})
+                prefer_old_k_this = getattr(cls, "_at_resume_prefer_old", [])
                 if prefer_old_k_this:
                     if block_name not in keep_old:
                         keep_old[block_name] = {}
